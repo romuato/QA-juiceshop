@@ -22,3 +22,4 @@
 3. Mettre mot de passe « 12 »
 4. Cliquer Register
 5. Vérifier message erreur « Mot de passe trop court »
+
