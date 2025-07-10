@@ -148,74 +148,47 @@
 
 ---
 
-📌 Partie 2 — Réaliser des tests fonctionnels & exploratoires
-📖 Cahier de recette
-Document = liste de scénarios précis, chacun avec résultat attendu.
+## Partie 2 — Réaliser tests fonctionnels & exploratoires
 
-Sert de référence pour vérifier toutes les fonctionnalités.
+### Cahier de recette
+- Liste scénarios + résultats attendus.
+- Permet de structurer test.
 
-Évite d’oublier un cas important.
+### Exécution tests
+- Scriptés ➜ suivre pas-à-pas.
+- Exploratoires ➜ naviguer, tester comportement imprévu.
 
-🧪 Exécution des tests
-Tests scriptés : suivre chaque étape exactement (précondition ➜ action ➜ résultat attendu).
+### Analyser anomalies
+- Prioriser (bloquant, majeur, mineur).
+- Fournir preuves : captures, logs.
 
-Tests exploratoires : naviguer librement, chercher comportements inattendus, bugs cachés.
+### Reporter anomalies
+- Ticket Jira complet ➜ résumé, steps, expected vs actual, gravité, pièce jointe.
 
-🔍 Analyser les anomalies
-Prioriser ➜ bloquant (bloque la release), majeur (impact fort), mineur (impact léger).
+---
 
-Preuves = captures d’écran, console log, vidéo si nécessaire.
+## Partie 3 — Campagne de test
 
-Noter contexte ➜ environnement, version, navigateur, data utilisée.
+### Dérouler
+- Définir périmètre, exécuter suites.
+- Suivre couverture.
 
-🗂️ Reporter les anomalies
-Rédiger ticket Jira complet :
+### Analyser données
+- Mesurer taux réussite / échec.
+- Isoler modules sensibles.
 
-Résumé clair ➜ [Feature] Bug précis.
+### Bilan
+- Synthèse claire.
+- Plan correctifs & réexécution.
 
-Steps ➜ 1 action = 1 ligne.
+---
 
-Résultat attendu vs. résultat réel.
+## Compléments
 
-Gravité (Critical / Major / Minor).
-
-Joindre capture / logs.
-
-📌 Partie 3 — Mener une campagne de test
-🏃 Dérouler la campagne
-Définir périmètre ➜ modules, scénarios.
-
-Exécuter suites de tests.
-
-Suivre progression ➜ % cas passés / échoués.
-
-Replanifier si blocage.
-
-📊 Analyser les données
-Mesurer taux de réussite / échec.
-
-Identifier modules à risque ➜ où se concentrent les défauts.
-
-Proposer plan d’action correctif.
-
-✅ Rédiger un bilan
-Synthèse ➜ rappel objectifs + résultats clés.
-
-Liste bugs majeurs + recommandations.
-
-Plan réexécution après corrections.
-
-💡 Compléments métier
-Rôles ➜ Lead QA (coordonne), QA Manager (pilote stratégie, reporting).
-
-Méthodes dev ➜ Cascade (Waterfall), Cycle en V, Agile (Scrum/Kanban).
-
-Pair testing ➜ tester à deux, mix dev + QA pour détecter plus vite.
-
-Automatisation ➜ identifier scénarios répétitifs ➜ Cypress / Selenium.
-
-Tests API ➜ Postman pour vérifier endpoints, JSON, auth.
-
-CI/CD ➜ GitHub Actions pour lancer tests auto à chaque push.
-
+- Comprendre rôles : Lead QA, QA Manager.
+- Méthodes dev : Waterfall, V-Model, Agile.
+- Pratiquer le pair testing.
+- Préparer automatisation ➜ Cypress / Selenium.
+- Connaître tests API ➜ Postman.
+- Maîtriser CI ➜ GitHub Actions.
 
