@@ -148,46 +148,74 @@
 
 ---
 
-## Partie 2 — Réaliser tests fonctionnels & exploratoires
+📌 Partie 2 — Réaliser des tests fonctionnels & exploratoires
+📖 Cahier de recette
+Document = liste de scénarios précis, chacun avec résultat attendu.
 
-### Cahier de recette
-- Liste scénarios + résultats attendus.
-- Permet de structurer test.
+Sert de référence pour vérifier toutes les fonctionnalités.
 
-### Exécution tests
-- Scriptés ➜ suivre pas-à-pas.
-- Exploratoires ➜ naviguer, tester comportement imprévu.
+Évite d’oublier un cas important.
 
-### Analyser anomalies
-- Prioriser (bloquant, majeur, mineur).
-- Fournir preuves : captures, logs.
+🧪 Exécution des tests
+Tests scriptés : suivre chaque étape exactement (précondition ➜ action ➜ résultat attendu).
 
-### Reporter anomalies
-- Ticket Jira complet ➜ résumé, steps, expected vs actual, gravité, pièce jointe.
+Tests exploratoires : naviguer librement, chercher comportements inattendus, bugs cachés.
 
----
+🔍 Analyser les anomalies
+Prioriser ➜ bloquant (bloque la release), majeur (impact fort), mineur (impact léger).
 
-## Partie 3 — Campagne de test
+Preuves = captures d’écran, console log, vidéo si nécessaire.
 
-### Dérouler
-- Définir périmètre, exécuter suites.
-- Suivre couverture.
+Noter contexte ➜ environnement, version, navigateur, data utilisée.
 
-### Analyser données
-- Mesurer taux réussite / échec.
-- Isoler modules sensibles.
+🗂️ Reporter les anomalies
+Rédiger ticket Jira complet :
 
-### Bilan
-- Synthèse claire.
-- Plan correctifs & réexécution.
+Résumé clair ➜ [Feature] Bug précis.
 
----
+Steps ➜ 1 action = 1 ligne.
 
-## Compléments
+Résultat attendu vs. résultat réel.
 
-- Comprendre rôles : Lead QA, QA Manager.
-- Méthodes dev : Waterfall, V-Model, Agile.
-- Pratiquer le pair testing.
-- Préparer automatisation ➜ Cypress / Selenium.
-- Connaître tests API ➜ Postman.
-- Maîtriser CI ➜ GitHub Actions.
+Gravité (Critical / Major / Minor).
+
+Joindre capture / logs.
+
+📌 Partie 3 — Mener une campagne de test
+🏃 Dérouler la campagne
+Définir périmètre ➜ modules, scénarios.
+
+Exécuter suites de tests.
+
+Suivre progression ➜ % cas passés / échoués.
+
+Replanifier si blocage.
+
+📊 Analyser les données
+Mesurer taux de réussite / échec.
+
+Identifier modules à risque ➜ où se concentrent les défauts.
+
+Proposer plan d’action correctif.
+
+✅ Rédiger un bilan
+Synthèse ➜ rappel objectifs + résultats clés.
+
+Liste bugs majeurs + recommandations.
+
+Plan réexécution après corrections.
+
+💡 Compléments métier
+Rôles ➜ Lead QA (coordonne), QA Manager (pilote stratégie, reporting).
+
+Méthodes dev ➜ Cascade (Waterfall), Cycle en V, Agile (Scrum/Kanban).
+
+Pair testing ➜ tester à deux, mix dev + QA pour détecter plus vite.
+
+Automatisation ➜ identifier scénarios répétitifs ➜ Cypress / Selenium.
+
+Tests API ➜ Postman pour vérifier endpoints, JSON, auth.
+
+CI/CD ➜ GitHub Actions pour lancer tests auto à chaque push.
+
+
