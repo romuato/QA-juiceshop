@@ -1,190 +1,193 @@
-# 📘 Notes Ultra-Complètes ISTQB CTFL + OpenClassrooms
+# 📘 Notes complètes — ISTQB CTFL v4.0
 
 ---
 
 ## 1️⃣ Fondamentaux du test logiciel
 
-### Définition
-- Tester = Évaluer, vérifier, valider la qualité d’un produit.
-- Double objectif :
-  - Vérifier (spécifications respectées ?)
-  - Valider (besoin utilisateur réel ?)
-- Le test **ne prouve pas qu’il n’y a pas de défaut**, mais qu’il y en a (principe 1).
+- Objectif : livrer un logiciel de qualité, aligné aux besoins réels.
+- Vérifie **conformité** (specs) + **validité** (besoins réels).
+- 2 approches :
+  - **Statique** : analyse docs, code, specs (revue, inspection, walkthrough).
+  - **Dynamique** : exécution du logiciel, vérification du comportement réel.
+
+- Test ≠ Débogage :
+  - Test : détecte l’erreur.
+  - Débogage : trouve la cause, corrige.
+
+- Définitions clés :
+  - **Erreur humaine** → produit un **défaut (bug)** → cause une **défaillance** visible.
+  - **Cause racine** : pourquoi ça s’est produit.
+
+- Objectifs :
+  - Trouver défauts.
+  - Réduire risques.
+  - Construire confiance.
+  - Vérifier exigences, normes.
+  - Aider décisions (livrer ou non).
+  - Prévenir défauts en prod.
 
 ---
 
-## 2️⃣ Objectifs du test
+## 2️⃣ Principes généraux du test logiciel
 
-- Trouver des défauts **avant prod**
-- Réduire le coût total ➜ corriger tôt = moins cher
-- Construire confiance avec le client
-- Limiter risques juridiques ➜ contrats / normes
-- Décider livrable ou non (Go/NoGo)
-- Mesurer couverture ➜ quelles fonctions sont testées ?
-
-**🗂️ Exemples réels** :  
-- Vérifier qu’un panier e-commerce calcule bien le total TTC.
-- Vérifier qu’un utilisateur ne peut pas accéder au compte d’un autre.
+1. **Présence, pas absence de défauts**.
+2. **Exhaustivité impossible**.
+3. **Tester tôt = économies**.
+4. **Regroupement défauts (Pareto)**.
+5. **Usure des tests : varier pour rester efficaces**.
+6. **Dépend du contexte**.
+7. **Illusion d’absence de défaut : un soft « sans bug » peut être inutilisable**.
 
 ---
 
-## 3️⃣ Vérifier vs Déboguer
+## 3️⃣ Processus de test
 
-| Test | Débogage |
-| ---- | ---- |
-| Détecte le problème | Trouve et corrige la cause |
-| Activité indépendante | Fait souvent par dev |
-| Résultat : rapport de bug | Résultat : correctif validé |
+- Cycle de vie typique :
+  1. **Planification**
+  2. **Analyse**
+  3. **Conception**
+  4. **Implémentation**
+  5. **Exécution**
+  6. **Clôture**
+
+- Activités statiques :
+  - Revue de code.
+  - Inspection formelle.
+  - Vérification de la conformité documentaire.
+
+- Résultat ➜ améliore qualité, détecte tôt, moins cher que corriger tard.
 
 ---
 
 ## 4️⃣ Types de tests
 
-### 📌 Fonctionnels
-
-- Vérifient qu’une fonction fait bien ce qu’elle doit faire.
-- Ex. : Cliquer « Commander » ➜ panier vidé, commande créée.
-
-### 📌 Non fonctionnels
-
-- Vérifient les aspects « qualité interne » :
-  - Performance (temps de réponse)
-  - Charge (supporte 1 000 users ?)
-  - Sécurité (pas de faille XSS)
-  - Compatibilité (navigateurs, appareils)
-  - Accessibilité (WCAG)
-
-### 📌 Exploratoires
-
-- Sans script rigide ➜ le testeur « joue » avec le produit.
-- Objectif : trouver des failles qu’un script raterait.
-- Exemple terrain : Juice Shop ➜ injection, faille XSS.
-
-### 📌 Régression
-
-- Vérifie qu’un correctif ou une nouvelle version **ne casse pas ce qui marchait avant**.
-- Automatisé souvent (CI/CD).
+- **Tests fonctionnels :** comportement attendu (ex. bouton OK → sauvegarde).
+- **Non fonctionnels :** perfs, sécurité, charge, compatibilité.
+- **Structuraux :** basé sur code.
+- **Maintenance (régression) :** vérifier que rien n’est cassé après modif.
+- **Exploratoires :** créatifs, trouver l’imprévu.
 
 ---
 
-## 5️⃣ Niveaux de tests
+## 5️⃣ Niveaux de test
 
-- **Unitaire** : 1 fonction / composant ➜ par dev.
-- **Intégration** : plusieurs modules ensemble.
-- **Système** : appli entière, environnement complet.
-- **Acceptation** : validé par client / PO.
-
----
-
-## 6️⃣ Les 7 Principes ISTQB
-
-1. Le test montre la **présence**, pas l’absence de défauts.
-2. Test exhaustif impossible ➜ prioriser.
-3. Tester tôt ➜ bug = moins cher.
-4. Défauts regroupés (Pareto 80/20).
-5. Usure des tests ➜ varier ➜ Paradoxe du pesticide.
-6. Test dépend du contexte ➜ banque ≠ blog ≠ jeu.
-7. Illusion absence défauts ➜ pas toujours utilisable si mal conçu.
+- **Unitaire** (développeur, petits morceaux de code)
+- **Intégration** (interaction modules)
+- **Système** (tout l’écosystème)
+- **Acceptation** (avec client / PO)
 
 ---
 
-## 7️⃣ Cycle de vie d’un bug
+## 6️⃣ Techniques de test
 
-1️⃣ Nouveau ➜ 2️⃣ Assigné ➜ 3️⃣ Corrigé ➜ 4️⃣ Vérifié ➜ 5️⃣ Clos  
-**Contenu bug Jira :**
-- Contexte (environnement, version)
-- Étapes précises pour reproduire
-- Résultat attendu vs observé
-- Preuve ➜ screenshot, logs
-- Sévérité : Blocker, Critical, Major, Minor
+### Boîte noire :
+- Basé sur exigences externes.
+- Techniques : partitions d’équivalence, valeurs limites, tables de décision.
 
----
-
-## 8️⃣ Cas de test – Bonnes pratiques
-
-- Titre + ID unique ➜ `TC-001`
-- Objectif clair
-- Préconditions
-- Étapes numérotées
-- Données d’entrée précises
-- Résultat attendu
-
-**Livrable pro ➜ Excel, TestRail, Xray (Jira).**
+### Boîte blanche :
+- Basé sur structure interne (code).
+- Technique : couverture des conditions, des branches.
 
 ---
 
-## 9️⃣ Qualité logicielle – ISO 25010
+## 7️⃣ Gestion des défauts
 
-- Fonctionnalité
-- Fiabilité
-- Performance
-- Sécurité
-- Compatibilité
-- Maintenabilité
-- Portabilité
-- Utilisabilité
-
----
-
-## 1️⃣0️⃣ Compétences du testeur
-
-- Rigueur
-- Curiosité
-- Communication claire
-- Esprit critique
-- Outils : Jira, GitHub, Selenium, Postman
-- Basique SQL ➜ vérifier BDD
-- Git ➜ versionner scripts/tests
+- Cycle de vie :
+  - Détecté.
+  - Signalé (ticket clair).
+  - Assigné.
+  - Corrigé.
+  - Vérifié.
+  - Clos.
+- Ticket ➜ contexte, étapes claires, résultat attendu/obtenu, preuves.
 
 ---
 
-## 1️⃣1️⃣ Méthodes dev
+## 8️⃣ Outils
 
-- Séquentielle ➜ Cascade, Cycle en V
-- Itérative ➜ Agile (Scrum)
-- QA doit s’adapter ➜ Agile = sprints ➜ automatiser les vérifications récurrentes.
-
----
-
-## 1️⃣2️⃣ Outils du testeur
-
-| Outil | Usage |
-| ----- | ----- |
-| Jira | Tickets, backlog, bugs |
-| Selenium | Automatiser tests E2E |
-| Cypress | Alternatif moderne Selenium |
-| Postman | Tester APIs |
-| GitHub Actions | CI/CD automatisé |
-| Anki | Révision flashcards |
+- **Jira** ➜ suivi tickets.
+- **Git / GitHub** ➜ versionning.
+- **Selenium** ➜ automatisation.
+- **Postman** ➜ APIs.
+- **CI/CD** ➜ GitHub Actions.
 
 ---
 
-## 🏷️ Rôles
+## 9️⃣ Compétences transverses
 
-- **Lead QA** : coordonne l’équipe QA.
-- **Test Manager** : planifie, budget, jalons.
-- **QA Analyst** : écrit cas, exécute tests manuels.
-- **QA Engineer / SDET** : automatise scripts (Selenium, Cypress).
+- Connaître norme ISO 25010 (fonctionnalité, fiabilité, maintenabilité…).
+- Comprendre KPI QA (taux de couverture, densité défauts).
+- Capacité à documenter : plan de test, cas de test, scripts.
 
----
 
-## 🎯 📌 Points Bonus
 
-- Un bon testeur documente tout ➜ plan, cas, bugs, rapports.
-- Screenshots, vidéos Loom ➜ preuves concrètes.
-- CI/CD ➜ chaque push ➜ tests automatiques ➜ badge ✅ sur GitHub.
+# 🎓 Notes OpenClassrooms — Formation QA complète
 
 ---
 
-## 🌐 Liens utiles
+## Partie 1 — Appréhender le test logiciel
 
-- [ISTQB Officiel](https://www.istqb.org/)
-- [OpenClassrooms – Initiez-vous au test](https://openclassrooms.com/fr/courses/7172056-initiez-vous-au-test-et-a-la-qualite-logicielle)
-- [Juice Shop](https://github.com/juice-shop/juice-shop)
-- [Cypress.io](https://www.cypress.io/)
-- [Selenium.dev](https://www.selenium.dev/)
+### Mission du testeur
+- Vérifie conformité & utilité.
+- Collabore devs / PO / Scrum Master.
+- Documente ➜ plan de test, cas de test, rapports.
+- Exécute ➜ tests manuels & auto.
+
+### Types de tests
+- Fonctionnels / Non fonctionnels.
+- Exploratoire / Régression.
+- Niveaux ➜ unitaire, intégration, système, acceptation.
+
+### Compétences
+- Rigueur, curiosité, communication.
+- Savoir prioriser & analyser risques.
+- Bon vocabulaire métier.
+
+### Cycle de vie projet
+- Phase test ➜ incluse dès analyse specs.
 
 ---
 
-## ✅ Pousse vers Git
+## Partie 2 — Réaliser tests fonctionnels & exploratoires
 
+### Cahier de recette
+- Liste scénarios + résultats attendus.
+- Permet de structurer test.
+
+### Exécution tests
+- Scriptés ➜ suivre pas-à-pas.
+- Exploratoires ➜ naviguer, tester comportement imprévu.
+
+### Analyser anomalies
+- Prioriser (bloquant, majeur, mineur).
+- Fournir preuves : captures, logs.
+
+### Reporter anomalies
+- Ticket Jira complet ➜ résumé, steps, expected vs actual, gravité, pièce jointe.
+
+---
+
+## Partie 3 — Campagne de test
+
+### Dérouler
+- Définir périmètre, exécuter suites.
+- Suivre couverture.
+
+### Analyser données
+- Mesurer taux réussite / échec.
+- Isoler modules sensibles.
+
+### Bilan
+- Synthèse claire.
+- Plan correctifs & réexécution.
+
+---
+
+## Compléments
+
+- Comprendre rôles : Lead QA, QA Manager.
+- Méthodes dev : Waterfall, V-Model, Agile.
+- Pratiquer le pair testing.
+- Préparer automatisation ➜ Cypress / Selenium.
+- Connaître tests API ➜ Postman.
+- Maîtriser CI ➜ GitHub Actions.
