@@ -5,13 +5,22 @@ on: [push]
 jobs:
   e2e:
     runs-on: ubuntu-latest
+
     steps:
+      # 1. Récupère le code
       - uses: actions/checkout@v4
 
+      # 2. Installe Node 22 pour npm
       - uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      - run: npm ci
-
-      - run: npx cypress run --spec "cypress/e2e/checkout.cy.js"
+      # 3. Pipeline Cypress tout‑en‑un
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          install-command: npm ci          # installe les dépendances
+          start: npm start                 # lance Juice Shop
+          wait-on: http://localhost:3000   # attend que le serveur réponde
+          wait-on-timeout: 120             # 120 s max (suffisant sur GitHub)
+          spec: cypress/e2e/checkout.cy.js # exécute uniquement ton test checkout
