@@ -1,0 +1,23 @@
+{
+  "name": "qa-juiceshop",
+  "version": "1.0.0",
+  "description": "mon premier projet testeur QA",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/romuato/QA-JuiceShop.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/romuato/QA-JuiceShop/issues"
+  },
+  "homepage": "https://github.com/romuato/QA-JuiceShop#readme"
+}
