@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/romuato/QA-JuiceShop/issues"
   },
-  "homepage": "https://github.com/romuato/QA-JuiceShop#readme"
+  "homepage": "https://github.com/romuato/QA-JuiceShop#readme",
+  "devDependencies": {
+    "cypress": "^14.5.2"
+  }
 }
