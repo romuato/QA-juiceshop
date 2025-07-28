@@ -27,7 +27,7 @@ jobs:
       # 4. Installe & démarre Juice Shop (sous‑dossier)
       - name: Install and start Juice Shop
         run: |
-          npm ci --prefix juice-shop               # installe dans juice-shop/
+         npm install --prefix juice-shop               # installe dans juice-shop/
           npm start --prefix juice-shop &          # démarre l’app
           npx wait-on http://localhost:3000 -t 600000
 
