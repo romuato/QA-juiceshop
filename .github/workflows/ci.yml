@@ -5,37 +5,36 @@ on:
   pull_request:
 
 jobs:
-  cypress-run:
+  e2e:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Clone le dépôt
+      # 1) Clone ton dépôt (tests Cypress + config)
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2. Configure Node 22 + cache npm
+      # 2) Installe Node 22 et met en cache node_modules
       - name: Use Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'npm'
+          cache: npm
 
-      # 3. Installe les dépendances de TEST (racine)
-      - name: Install root deps
+      # 3) Installe les dépendances de TEST (racine)
+      - name: Install test deps
         run: npm ci
 
-      # 4. Installe & démarre Juice Shop (sous‑dossier)
-      - name: Install and start Juice Shop
+      # 4) Lance OWASP Juice Shop dans un conteneur Docker
+      - name: Start Juice Shop
         run: |
-         npm install --prefix juice-shop               # installe dans juice-shop/
-          npm start --prefix juice-shop &          # démarre l’app
-          npx wait-on http://localhost:3000 -t 600000
+          docker run -d --name juice -p 3000:3000 bkimminich/juice-shop
+          npx wait-on http://localhost:3000 -t 600000   # attend (max 10 min)
 
-      # 5. Exécute Cypress
+      # 5) Exécute la suite Cypress
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
           wait-on: 'http://localhost:3000'
-          wait-on-timeout: 600000                  # 10 min ms
+          wait-on-timeout: 600000
           spec: cypress/e2e/**/*.cy.{js,ts}
           browser: chrome
