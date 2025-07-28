@@ -5,35 +5,37 @@ on:
   pull_request:
 
 jobs:
-  e2e:
+  cypress-run:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Clone le repo
-      - uses: actions/checkout@v4
+      # 1. Clone le dépôt
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      # 2. Installe Node 22 et met en cache node_modules à la racine
-      - uses: actions/setup-node@v4
+      # 2. Configure Node 22 + cache npm
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
+          cache: 'npm'
 
       # 3. Installe les dépendances de TEST (racine)
-      - run: npm ci
+      - name: Install root deps
+        run: npm ci
 
-      # 4. Installe les dépendances de Juice Shop (sous‑dossier) et démarre le serveur
-            - name: Install & start Juice Shop
+      # 4. Installe & démarre Juice Shop (sous‑dossier)
+      - name: Install and start Juice Shop
         run: |
-          npm --prefix juice-shop install          # installe et génère package-lock
-          npm --prefix juice-shop start &          # démarre Juice Shop
+          npm ci --prefix juice-shop               # installe dans juice-shop/
+          npm start --prefix juice-shop &          # démarre l’app
           npx wait-on http://localhost:3000 -t 600000
 
-
-      # 5. Lance Cypress
+      # 5. Exécute Cypress
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
           wait-on: 'http://localhost:3000'
-          wait-on-timeout: 600000
+          wait-on-timeout: 600000                  # 10 min ms
           spec: cypress/e2e/**/*.cy.{js,ts}
           browser: chrome
