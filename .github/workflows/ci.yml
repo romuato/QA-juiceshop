@@ -22,11 +22,12 @@ jobs:
       - run: npm ci
 
       # 4. Installe les dépendances de Juice Shop (sous‑dossier) et démarre le serveur
-      - name: Install & start Juice Shop
+            - name: Install & start Juice Shop
         run: |
-          npm --prefix juice-shop ci            # installe dans juice-shop/
-          npm --prefix juice-shop start &       # lance le serveur
-          npx wait-on http://localhost:3000 -t 600000  # attend qu'il réponde (10 min max)
+          npm --prefix juice-shop install          # installe et génère package-lock
+          npm --prefix juice-shop start &          # démarre Juice Shop
+          npx wait-on http://localhost:3000 -t 600000
+
 
       # 5. Lance Cypress
       - name: Cypress run
