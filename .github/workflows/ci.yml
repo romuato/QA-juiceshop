@@ -7,20 +7,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Récupère le code
+      # 1) Récupère le code
       - uses: actions/checkout@v4
 
-      # 2. Installe Node 22 pour npm
+      # 2) Installe Node 22
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm                # bonus : accélère l’install
 
-      # 3. Pipeline Cypress tout‑en‑un
+      # 3) Installe les dépendances du projet
+      - run: npm ci
+
+      # 4) Démarre Juice Shop dans Docker puis attend qu’il réponde
+      - name: Start Juice Shop
+        run: |
+          docker run -d --name juice -p 3000:3000 bkimminich/juice-shop
+          npx wait-on http://localhost:3000 -t 600000
+
+      # 5) Exécute Cypress
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          install-command: npm ci          # installe les dépendances
-          start: npm start                 # lance Juice Shop
-          wait-on: http://localhost:3000   # attend que le serveur réponde
-          wait-on-timeout: 120             # 120 s max (suffisant sur GitHub)
-          spec: cypress/e2e/checkout.cy.js # exécute uniquement ton test checkout
+          start: ""                         # ⬅️ désactive npm start
+          wait-on: http://localhost:3000
+          wait-on-timeout: 600000
+          spec: cypress/e2e/**/*.cy.{js,ts} # ou mets un fichier précis
+          browser: chrome
+
+      # 6) Stoppe le conteneur (toujours)
+      - name: Stop Juice Shop
+        if: always()
+        run: docker rm -f juice || true
