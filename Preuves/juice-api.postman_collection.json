@@ -1,84 +1,186 @@
 {
-	"id": "a1bd24ae-4c2e-4714-abd9-52b5c3e8a6d8",
-	"name": "Juice Shop API",
-	"timestamp": "2025-08-07T08:17:00.547Z",
-	"collection_id": "47374888-7d7b9c7d-f1a4-43b0-92c7-d1cf13a33590",
-	"folder_id": 0,
-	"environment_id": "0",
-	"totalPass": 2,
-	"delay": 0,
-	"persist": true,
-	"status": "finished",
-	"startedAt": "2025-08-07T08:16:57.485Z",
-	"totalFail": 0,
-	"results": [
+	"info": {
+		"_postman_id": "7d7b9c7d-f1a4-43b0-92c7-d1cf13a33590",
+		"name": "Juice Shop API",
+		"description": "Login / Produits / Panier – tests automatisés",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47374888"
+	},
+	"item": [
 		{
-			"id": "6a410847-04e9-41ed-b0f4-2644d7b6d21c",
 			"name": "New Request",
-			"url": "http://localhost:3000/rest/user/login",
-			"time": 696,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"200 OK": true
-			},
-			"testPassFailCounts": {
-				"200 OK": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				696
-			],
-			"allTests": [
+			"event": [
 				{
-					"200 OK": true
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const res = pm.response.json();\r",
+							"pm.test(\"Login 200\", () => pm.expect(pm.response.code).to.eql(200));\r",
+							"\r",
+							"const token = res?.authentication?.token;\r",
+							"pm.test(\"Token présent\", () => pm.expect(token).to.be.a(\"string\"));\r",
+							"\r",
+							"if (token) {\r",
+							"  // Variables au niveau de la COLLECTION (fonctionne même avec \"No environment\")\r",
+							"  pm.collectionVariables.set(\"authToken\", token);\r",
+							"  const payload = JSON.parse(atob(token.split(\".\")[1]));\r",
+							"  pm.collectionVariables.set(\"basketId\", payload.bid);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
 				}
-			]
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"admin@juice-sh.op\",\r\n  \"password\": \"admin123\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/rest/user/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"rest",
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
 		},
 		{
-			"id": "5a238427-acfc-46c7-bbb3-c0a6765fc29b",
 			"name": "Products – GET /api/Products",
-			"url": "http://localhost:3000/api/Products",
-			"time": 550,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Schéma produits OK": true
-			},
-			"testPassFailCounts": {
-				"Schéma produits OK": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				550
-			],
-			"allTests": [
+			"event": [
 				{
-					"Schéma produits OK": true
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"  type: \"object\",\r",
+							"  required: [\"data\"],\r",
+							"  properties: {\r",
+							"    data: {\r",
+							"      type: \"array\",\r",
+							"      minItems: 1,\r",
+							"      items: {\r",
+							"        type: \"object\",\r",
+							"        required: [\"id\", \"name\", \"price\"],\r",
+							"        properties: {\r",
+							"          id:    { type: \"integer\" },\r",
+							"          name:  { type: \"string\"  },\r",
+							"          price: { type: \"number\"  }\r",
+							"        }\r",
+							"      }\r",
+							"    }\r",
+							"  }\r",
+							"};\r",
+							"\r",
+							"pm.test(\"Schéma produits OK\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"  pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
 				}
-			]
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/Products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"Products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/BasketItems",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Basket item créé\", function () {\r",
+							"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"BasketId\": {{basketId}},\r\n  \"ProductId\": 1,\r\n  \"quantity\": 1\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/BasketItems",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"BasketItems"
+					]
+				}
+			},
+			"response": []
 		}
 	],
-	"count": 1,
-	"totalTime": 1246,
-	"collection": {
-		"requests": [
-			{
-				"id": "6a410847-04e9-41ed-b0f4-2644d7b6d21c",
-				"method": "POST"
-			},
-			{
-				"id": "5a238427-acfc-46c7-bbb3-c0a6765fc29b",
-				"method": "GET"
-			}
-		]
-	}
+	"variable": [
+		{
+			"key": "authToken",
+			"value": ""
+		},
+		{
+			"key": "basketId",
+			"value": ""
+		}
+	]
 }
