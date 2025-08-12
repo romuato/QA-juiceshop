@@ -38,3 +38,23 @@ Cypress.Commands.add('login', (email, pass) => {
    Tu peux ajouter d’autres helpers ici, toujours documentés
    avec JSDoc pour profiter de l’auto-complétion VS Code.
    ========================================================== */
+// Connexion rapide par l'API, puis on pose le jeton (token) dans le localStorage.
+Cypress.Commands.add('loginAsAdmin', () => {
+  cy.fixture('accounts').then(acc => {
+    const { email, password } = acc.admin;
+
+    cy.request('POST', 'http://localhost:3000/rest/user/login', { email, password })
+      .then(({ status, body }) => {
+        expect(status).to.eq(200);
+        const token = body?.authentication?.token;
+        expect(token, 'JWT token').to.be.a('string');
+
+        // Ouvre l'app, insère le token, recharge
+        cy.visit('http://localhost:3000/');
+        cy.window().then(win => {
+          win.localStorage.setItem('token', token);
+        });
+        cy.reload();
+      });
+  });
+});
