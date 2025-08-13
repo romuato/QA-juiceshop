@@ -6,6 +6,7 @@ on:
 
 jobs:
   # --- Job 1 : Postman / Newman (API) ---
+    # --- Job 1 : Postman / Newman (API) ---
   newman:
     runs-on: ubuntu-latest
     steps:
@@ -15,10 +16,21 @@ jobs:
         with:
           node-version: 22
 
+      - name: Start Juice Shop (for Newman)
+        run: |
+          docker run -d --name juice -p 3000:3000 bkimminich/juice-shop
+          npx wait-on http://localhost:3000 -t 600000
+
       - name: Run Postman tests with Newman
         run: |
           npm install -g newman
+          # (optionnel) vérifier que le fichier existe
+          ls -la Preuves
           newman run Preuves/juice-api.postman_collection.json
+
+      - name: Stop Juice Shop
+        if: always()
+        run: docker rm -f juice || true
 
   # --- Job 2 : Cypress - SMOKE UNIQUEMENT ---
   cypress_smoke:
