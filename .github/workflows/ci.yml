@@ -51,14 +51,15 @@ jobs:
           docker run -d --name juice -p 3000:3000 bkimminich/juice-shop
           npx wait-on http://localhost:3000 -t 600000
 
-      - name: Cypress smoke (auth only)
+      - name: Cypress smoke (auth + home)
         uses: cypress-io/github-action@v6
         with:
-          start: ""                          # ne pas lancer npm start
+          start: ""
           wait-on: http://localhost:3000
           wait-on-timeout: 600000
-          spec: cypress/e2e/auth-smoke.cy.js # <<< on ne lance QUE ce test
+          spec: cypress/e2e/*-smoke.cy.js   # <<< exécute tous les *-smoke
           browser: chrome
+
 
       - name: Stop Juice Shop
         if: always()
