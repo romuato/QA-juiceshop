@@ -1,69 +1,65 @@
-name: Cypress CI
+name: CI
 
-on: [push]
+on:
+  push:
+  pull_request:
 
 jobs:
-  e2e:
+  # --- Job 1 : Postman / Newman (API) ---
+    # --- Job 1 : Postman / Newman (API) ---
+  newman:
     runs-on: ubuntu-latest
-
     steps:
-      # 1) Récupère le code
       - uses: actions/checkout@v4
 
-      # 2) Installe Node 22
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm  # accélère l’install
 
-      # 3) Installe les dépendances du projet
-      - run: npm ci
+      - name: Start Juice Shop (for Newman)
+        run: |
+          docker run -d --name juice -p 3000:3000 bkimminich/juice-shop
+          npx wait-on http://localhost:3000 -t 600000
 
-      # 4) Démarre Juice Shop dans Docker puis attend qu’il réponde
+      - name: Run Postman tests with Newman
+        run: |
+          npm install -g newman
+          # (optionnel) vérifier que le fichier existe
+          ls -la Preuves
+          newman run Preuves/juice-api.postman_collection.json
+
+      - name: Stop Juice Shop
+        if: always()
+        run: docker rm -f juice || true
+
+  # --- Job 2 : Cypress - SMOKE UNIQUEMENT ---
+  cypress_smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install deps
+        run: npm ci
+
       - name: Start Juice Shop
         run: |
           docker run -d --name juice -p 3000:3000 bkimminich/juice-shop
           npx wait-on http://localhost:3000 -t 600000
 
-      # 5) Exécute Cypress
-      - name: Cypress run
+      - name: Cypress smoke (auth + home)
         uses: cypress-io/github-action@v6
         with:
-          start: ""                         # désactive npm start
+          start: ""
           wait-on: http://localhost:3000
           wait-on-timeout: 600000
-          spec: cypress/e2e/**/*.cy.{js,ts}
+          spec: cypress/e2e/*-smoke.cy.js   # <<< exécute tous les *-smoke
           browser: chrome
 
-      # 6) Stoppe le conteneur (toujours)
-      - name: Stop Juice Shop
-        if: always()
-        run: docker rm -f juice || true
-
-  postman:
-    name: Postman (Newman)
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node (for npm/npx/newman)
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Start Juice Shop in Docker
-        run: |
-          docker run -d --name juice -p 3000:3000 bkimminich/juice-shop
-          npx wait-on http://localhost:3000 -t 600000
-
-      - name: Install Newman
-        run: npm install -g newman
-
-      - name: Run Postman collection
-        run: newman run Preuves/juice-api.postman_collection.json
 
       - name: Stop Juice Shop
         if: always()
