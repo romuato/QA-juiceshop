@@ -17,7 +17,7 @@ describe('Auth smoke', () => {
       });
       cy.reload();
 
-      // 3) Fermer les popups si elles existent (welcome + cookies)
+      // 3) Fermer bannières si présentes (welcome + cookies)
       cy.get('body').then($b => {
         if ($b.find('button[aria-label="Close Welcome Banner"]').length) {
           cy.get('button[aria-label="Close Welcome Banner"]').click({ force: true });
@@ -27,9 +27,9 @@ describe('Auth smoke', () => {
         }
       });
 
-      // 4) Ouvrir le menu compte et vérifier que Logout est présent
+      // 4) Ouvrir le menu compte et vérifier que Logout existe (pas "visible" à cause de l'overlay)
       cy.get('#navbarAccount').click({ force: true });
-      cy.get('#navbarLogoutButton', { timeout: 10000 }).should('exist'); // pas "visible"
+      cy.get('#navbarLogoutButton', { timeout: 10000 }).should('exist');
     });
   });
 });
