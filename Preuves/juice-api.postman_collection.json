@@ -14,18 +14,31 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"const res = pm.response.json();\r",
-							"pm.test(\"Login 200\", () => pm.expect(pm.response.code).to.eql(200));\r",
+							"// --- Parse la réponse ---\r",
+							"const { authentication, bid } = pm.response.json();\r",
 							"\r",
-							"const token = res?.authentication?.token;\r",
-							"pm.test(\"Token présent\", () => pm.expect(token).to.be.a(\"string\"));\r",
+							"// --- Sauver le token (env + collection) ---\r",
+							"pm.environment.set('authToken', authentication.token);\r",
+							"pm.collectionVariables.set('authToken', authentication.token);\r",
 							"\r",
-							"if (token) {\r",
-							"  // Variables au niveau de la COLLECTION (fonctionne même avec \"No environment\")\r",
-							"  pm.collectionVariables.set(\"authToken\", token);\r",
-							"  const payload = JSON.parse(atob(token.split(\".\")[1]));\r",
-							"  pm.collectionVariables.set(\"basketId\", payload.bid);\r",
+							"// --- Sauver le basketId (env + collection) SANS décoder le JWT ---\r",
+							"if (bid !== undefined && bid !== null) {\r",
+							"  pm.environment.set('basketId', String(bid));\r",
+							"  pm.collectionVariables.set('basketId', String(bid));\r",
 							"}\r",
+							"\r",
+							"// --- Test de statut ---\r",
+							"pm.test('200 OK', () => pm.response.to.have.status(200));\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
 							""
 						],
 						"type": "text/javascript",
@@ -150,7 +163,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"BasketId\": {{basketId}},\r\n  \"ProductId\": 1,\r\n  \"quantity\": 1\r\n}\r\n",
+					"raw": "{ \"ProductId\": 1, \"quantity\": 1 }\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
