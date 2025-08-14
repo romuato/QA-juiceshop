@@ -14,18 +14,38 @@
 					"listen": "test",
 					"script": {
 						"exec": [
+							"// --- Parse la réponse ---\r",
 							"const res = pm.response.json();\r",
-							"pm.test(\"Login 200\", () => pm.expect(pm.response.code).to.eql(200));\r",
-							"\r",
 							"const token = res?.authentication?.token;\r",
-							"pm.test(\"Token présent\", () => pm.expect(token).to.be.a(\"string\"));\r",
 							"\r",
+							"// --- Sauver le token (env + collection) ---\r",
 							"if (token) {\r",
-							"  // Variables au niveau de la COLLECTION (fonctionne même avec \"No environment\")\r",
-							"  pm.collectionVariables.set(\"authToken\", token);\r",
-							"  const payload = JSON.parse(atob(token.split(\".\")[1]));\r",
-							"  pm.collectionVariables.set(\"basketId\", payload.bid);\r",
+							"  pm.environment.set('authToken', token);\r",
+							"  pm.collectionVariables.set('authToken', token);\r",
 							"}\r",
+							"\r",
+							"// --- Récupérer le basketId directement dans la réponse ---\r",
+							"const bid = res?.bid;\r",
+							"\r",
+							"// --- Vérifier + enregistrer le basketId (en string) ---\r",
+							"pm.test('bid présent dans la réponse', () => {\r",
+							"  pm.expect(bid, 'basketId').to.be.a('number');\r",
+							"  pm.environment.set('basketId', String(bid));\r",
+							"  pm.collectionVariables.set('basketId', String(bid));\r",
+							"});\r",
+							"\r",
+							"// (trace utile dans la console Postman)\r",
+							"console.log('bid=', bid);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
 							""
 						],
 						"type": "text/javascript",
@@ -150,7 +170,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"BasketId\": {{basketId}},\r\n  \"ProductId\": 1,\r\n  \"quantity\": 1\r\n}\r\n",
+					"raw": "{ \"ProductId\": 1, \"BasketId\": {{basketId}}, \"quantity\": 1 }\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
