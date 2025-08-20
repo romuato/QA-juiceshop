@@ -22,3 +22,8 @@ Modifier
 git add README.md
 git commit -m "docs: commandes rapides (Newman + Cypress smoke)"
 git push
+
+## Lancer Newman en local
+```bash
+npx newman run "Preuves/juice-api.postman_collection.json" -e Preuves/local.postman_environment.json
+
